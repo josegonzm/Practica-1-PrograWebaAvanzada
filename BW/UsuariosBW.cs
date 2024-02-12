@@ -1,5 +1,6 @@
 ﻿using Abstracciones.BW;
 using Abstracciones.DA;
+using Abstracciones.Modelos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,14 @@ namespace BW
             _UsuariosDA = usuariosDA;
         }
 
+        public async Task<IEnumerable<Usuarios>> MostrarUsuarios()
+        {
+            return await _UsuariosDA.MostrarUsuarios();
+        }
+        public async Task<Usuarios> MostrarUsuariosPorID(Guid id)
+        {
+            return await _UsuariosDA.MostrarUsuariosPorID(id);
+        }
         public async Task<Guid> AgregarUsuario(string nombre, string primerApellido, string? segundoApellido, string correo, string contraseña)
         {
             return await _UsuariosDA.AgregarUsuario( nombre, primerApellido, segundoApellido, correo, contraseña);

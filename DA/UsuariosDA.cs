@@ -1,4 +1,6 @@
 ﻿using Abstracciones.DA;
+using Abstracciones.Modelos;
+using DA.Helpers;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using System;
@@ -18,6 +20,22 @@ namespace DA
         {
             _repositorioDapper = repositorioDapper;
             _sqlConnection = repositorioDapper.ObtenerRepositorioDapper();
+        }
+
+        public async Task<IEnumerable<Usuarios>> MostrarUsuarios()
+        {
+            string sql = @"[MostrarTodasPersonas]";
+            var Consulta = await _sqlConnection.QueryAsync<DA.Entities.Usuarios>(sql);
+            return ConvertirListaPersonaDBAModelo(Consulta.ToList());
+
+        }
+
+        public async Task<Usuarios> MostrarUsuariosPorID(Guid id)
+        {
+            string sql = @"[ObtenerUsuarioPorId]";
+            var Consulta = await _sqlConnection.QueryAsync<DA.Entities.Usuarios>(sql, new { Id = id });
+            return ConvertirPersonaDBAModelo(Consulta.First());
+
         }
 
         public async Task<Guid> AgregarUsuario(string nombre, string primerApellido, string? segundoApellido, string correo, string contraseña)
@@ -40,6 +58,17 @@ namespace DA
             string sql = "@[EliminarUsuario]";
             var Consulta = _sqlConnection.ExecuteAsync(sql, new { Id = id });
             return id;
+        }
+
+        private IEnumerable<Abstracciones.Modelos.Usuarios> ConvertirListaPersonaDBAModelo(IEnumerable<DA.Entities.Usuarios> Usuarios)
+        {
+            var resultadoConversion = Convertidor.ConvertirLista<DA.Entities.Usuarios, Abstracciones.Modelos.Usuarios>(Usuarios);
+            return resultadoConversion;
+        }
+        private Abstracciones.Modelos.Usuarios ConvertirPersonaDBAModelo(DA.Entities.Usuarios Usuarios)
+        {
+            var resultadoConversion = Convertidor.Convertir<DA.Entities.Usuarios, Abstracciones.Modelos.Usuarios>(Usuarios);
+            return resultadoConversion;
         }
     }
 }
