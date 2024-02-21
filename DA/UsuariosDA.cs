@@ -24,7 +24,7 @@ namespace DA
 
         public async Task<IEnumerable<Usuarios>> MostrarUsuarios()
         {
-            string sql = @"[MostrarTodasPersonas]";
+            string sql = @"[MostrarTodosUsuarios]";
             var Consulta = await _sqlConnection.QueryAsync<DA.Entities.Usuarios>(sql);
             return ConvertirListaPersonaDBAModelo(Consulta.ToList());
 
@@ -40,7 +40,7 @@ namespace DA
 
         public async Task<Guid> AgregarUsuario(string nombre, string primerApellido, string? segundoApellido, string correo, string contraseña)
         {
-            string sql = "@[AgregarUsuario]";
+            string sql = @"[AgregarUsuario]";
             var Consulta = await _sqlConnection.ExecuteScalarAsync(sql, new { Nombre = nombre, Primer_Apellido = primerApellido, Segundo_Apellido = segundoApellido, Correo = correo, Contraseña = contraseña });
             return (Guid)Consulta;
 
@@ -48,14 +48,14 @@ namespace DA
 
         public async Task<Guid> ActualizarUsuario(Guid id, string nombre, string primerApellido, string? segundoApellido, string correo, string contraseña)
         {
-            string sql = "@[ActualizarUsuario]";
+            string sql = @"[ActualizarUsuario]";
             var Consulta = await _sqlConnection.ExecuteAsync(sql, new { Id = id, Nombre = nombre, Primer_Apellido = primerApellido, Segundo_Apellido = segundoApellido, Correo = correo, Contraseña = contraseña });
             return id;
         }
 
         public async Task<Guid> EliminarUsuario(Guid id)
         {
-            string sql = "@[EliminarUsuario]";
+            string sql = @"[EliminarUsuario]";
             var Consulta = _sqlConnection.ExecuteAsync(sql, new { Id = id });
             return id;
         }

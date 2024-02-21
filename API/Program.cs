@@ -18,6 +18,9 @@ builder.Services.AddScoped<IRepositorioDapper, RepositorioDapper>();
 
 builder.Services.AddScoped<IUsuariosDA, UsuariosDA>();
 builder.Services.AddScoped<IUsuariosBW, UsuariosBW>();
+builder.Services.AddScoped<ITareasBW, TareasBW>();
+builder.Services.AddScoped<ITareasDA, TareasDA>();
+
 
 var app = builder.Build();
 

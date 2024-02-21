@@ -5,76 +5,73 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("API/[controller]")]
+    [Route("[controller]")]
     public class UsuariosController : Controller, IUsuariosController
     {
-        private IUsuariosBW _usuariosBW;
+        private IUsuariosBW _usuarioBW;
         private readonly ILogger<UsuariosController> _logger;
 
         public UsuariosController(IUsuariosBW usuariosBW, ILogger<UsuariosController> logger)
         {
-            _usuariosBW = usuariosBW;
+            _usuarioBW = usuariosBW;
             _logger = logger;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] Usuarios usuarios)
+        [HttpGet()]
+        [Route("MostrarUsuarios")]
+        public async Task<IActionResult> GetAsync() 
         {
             try
             {
-                _logger.LogInformation("Agregando persona");
-                var id = await _usuariosBW.AgregarUsuario(usuarios.Nombre, usuarios.Primer_Apellido, usuarios.Segundo_Apellido, usuarios.Correo, usuarios.Contraseña);
-                return CreatedAtAction(nameof(GetByIdAsync), new { id = id }, usuarios);
-            } catch (Exception ex)
-            {
-                return GenerarError(ex, @"Error al agregar una persona");
-            }
-        }
-
-        [HttpGet("{id}")]
-        [ActionName(nameof(GetByIdAsync))]
-
-        public async Task<IActionResult> GetByIdAsync(Guid id)
-        {
-            try
-            {
-                _logger.LogInformation("Consultando personas");
-                return Ok(await _usuariosBW.MostrarUsuariosPorID(id));
+                return Ok(await _usuarioBW.MostrarUsuarios());
             }
             catch (Exception ex)
             {
                 return GenerarError(ex, @"Error al consultar los usuarios");
             }
-
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync([FromQuery] Guid id)
         {
             try
             {
-                return Ok(await _usuariosBW.MostrarUsuarios());
-
-            } catch (Exception ex)
+                _logger.LogInformation("Eliminando usuario");
+                return Ok(await _usuarioBW.EliminarUsuario(id));
+            }
+            catch (Exception ex)
             {
-                return GenerarError(ex, @"Error al consultar los usuarios");
+                return GenerarError(ex, @"Error al eliminar un usuario");
             }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(Guid id, [FromBody] string nombre, string primerApellido, string? segundoApellido, string correo, string contraseña)
+        public async Task<IActionResult> PutAsync([FromQuery] Guid id, [FromBody] string nombre, string primer_apellido, string? segundo_apellido, string correo, string contraseña)
         {
             try
             {
                 _logger.LogInformation("Editando usuario");
-                return Ok(await _usuariosBW.ActualizarUsuario(id, nombre, primerApellido, segundoApellido, correo, contraseña));
-            } catch (Exception ex)
+                return Ok(await _usuarioBW.ActualizarUsuario(id, nombre, primer_apellido, segundo_apellido, correo, contraseña));
+            }
+            catch (Exception ex)
             {
-                return GenerarError(ex, "Error al editar un usuario");
+                return GenerarError(ex, @"Error al editar el usuario");
             }
         }
 
-
+        [HttpPost()]
+        public async Task<IActionResult> PostAsync([FromBody] Usuarios usuarios)
+        {
+            try
+            {
+                _logger.LogInformation("Agregando usuario");
+                return Ok(await _usuarioBW.AgregarUsuario(usuarios.Nombre, usuarios.Primer_Apellido, usuarios.Segundo_Apellido, usuarios.Correo, usuarios.Contraseña));
+            }
+            catch (Exception ex)
+            {
+                return GenerarError(ex, @"Error al agregar usuario");
+            }
+        }
 
         private IActionResult GenerarError(Exception ex, string mensaje)
         {

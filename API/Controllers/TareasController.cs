@@ -1,5 +1,6 @@
 ﻿using Abstracciones.BW;
 using Abstracciones.Modelos;
+using BW;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -18,45 +19,13 @@ namespace API.Controllers
             _logger = logger;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] Tareas tareas)
-        {
-            try
-            {
-                _logger.LogInformation("Agregando tarea");
-                var id = await _tareasBW.AgregarTareas(tareas.Nombre, tareas.Descripcion, tareas.Fecha_Inicio, tareas.Fecha_Fin, tareas.Asignado, tareas.Estado);
-                return CreatedAtAction(nameof(GetByIdAsync), new { id = id }, tareas);
-            }
-            catch (Exception ex)
-            {
-                return GenerarError(ex, @"Error al agregar una tarea");
-            }
-        }
-
-        [HttpGet("{id}")]
-        [ActionName(nameof(GetByIdAsync))]
-
-        public async Task<IActionResult> GetByIdAsync(Guid id)
-        {
-            try
-            {
-                _logger.LogInformation("Consultando personas");
-                return Ok(await _tareasBW.MostrarTareasPorID(id));
-            }
-            catch (Exception ex)
-            {
-                return GenerarError(ex, @"Error al consultar las tareas");
-            }
-
-        }
-
-        [HttpGet]
+        [HttpGet()]
+        [Route("MostrarTareas")]
         public async Task<IActionResult> GetAsync()
         {
             try
             {
                 return Ok(await _tareasBW.MostrarTareas());
-
             }
             catch (Exception ex)
             {
@@ -64,20 +33,47 @@ namespace API.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync([FromQuery] Guid id)
+        {
+            try
+            {
+                _logger.LogInformation("Eliminando tarea");
+                return Ok(await _tareasBW.EliminarTareas(id));
+            }
+            catch (Exception ex)
+            {
+                return GenerarError(ex, @"Error al eliminar una tarea");
+            }
+        }
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(Guid id,  string nombre, string descripcion, DateTime fecha_inico, DateTime fecha_final, Usuarios asignado, string estado)
+        public async Task<IActionResult> PutAsync([FromQuery] Guid id,  string nombre, string descripcion, DateTime fecha_inicio, DateTime fecha_fin, Usuarios asignado, string estado)
         {
             try
             {
                 _logger.LogInformation("Editando tarea");
-                return Ok(await _tareasBW.ActualizarTareas(id, nombre, descripcion, fecha_inico, fecha_final, asignado, estado));
+                return Ok(await _tareasBW.ActualizarTareas(id, nombre, descripcion, fecha_inicio, fecha_fin, asignado, estado));
             }
             catch (Exception ex)
             {
-                return GenerarError(ex, "Error al editar una tarea");
+                return GenerarError(ex, @"Error al editar el usuario");
             }
         }
 
+        [HttpPost()]
+        public async Task<IActionResult> PostAsync([FromBody] Tareas tareas)
+        {
+            try
+            {
+                _logger.LogInformation("Agregando tarea");
+                return Ok(await _tareasBW.AgregarTareas(tareas.Nombre, tareas.Descripcion, tareas.Fecha_Inicio, tareas.Fecha_Fin, tareas.Asignado, tareas.Estado));
+            }
+            catch (Exception ex)
+            {
+                return GenerarError(ex, @"Error al agregar tarea");
+            }
+        }
 
 
         private IActionResult GenerarError(Exception ex, string mensaje)

@@ -25,7 +25,7 @@ public class TareasDA : ITareasDA
 
         public async Task<Guid> ActualizarTareas(Guid id, string nombre, string descripcion, DateTime fecha_inicio, DateTime fecha_fin, Usuarios asignados, string estado)
         {
-            string sql = "@[ActualizarTarea]";
+            string sql = @"[ActualizarTarea]";
             var Consulta = await _sqlConnection.ExecuteAsync(sql, new { Id = id, Nombre = nombre, Descripcion = descripcion, Fecha_Inicio = fecha_inicio, Fecha_Fin = fecha_fin, Asignados = asignados, Estado = estado });
             return id;
             
@@ -34,14 +34,14 @@ public class TareasDA : ITareasDA
 
         public async Task<Guid> AgregarTareas(string nombre, string descripcion, DateTime fecha_inicio, DateTime fecha_fin, Usuarios asignados, string estado)
         {
-            string sql = "@[AgregarTarea]";
+            string sql = @"[AgregarTarea]";
             var Consulta = await _sqlConnection.ExecuteScalarAsync(sql, new { Nombre = nombre, Descripcion = descripcion, Fecha_Inicio = fecha_inicio, Fecha_Fin = fecha_fin, Asignados = asignados, Esatado = estado });
             return (Guid)Consulta;
         }
 
         public async Task<Guid> EliminarTareas(Guid id)
         {
-            string sql = "@[EliminarUsuario]";
+            string sql = @"[EliminarTarea]";
             var Consulta = _sqlConnection.ExecuteAsync(sql, new { Id = id });
             return id;
         }

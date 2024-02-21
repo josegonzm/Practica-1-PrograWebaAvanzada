@@ -1,6 +1,7 @@
 ﻿using Abstracciones.Modelos;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace Abstracciones.Entities
 
         public DateTime Fecha_Fin { get; set; }
 
-        public Usuarios Asignado { get; set; }
+        public Usuarios Asignado { get; set; } 
 
         public string Estado { get; set; } 
 
