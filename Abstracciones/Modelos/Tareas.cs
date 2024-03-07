@@ -17,7 +17,7 @@ namespace Abstracciones.Modelos
 
         public DateTime Fecha_Fin { get; set; }
 
-        public Usuarios Asignado { get; set; }
+        public string Asignado { get; set; }
 
         public string Estado { get; set; }
 

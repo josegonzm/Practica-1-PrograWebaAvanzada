@@ -26,13 +26,13 @@ public class TareasDA : ITareasDA
         public async Task<Guid> ActualizarTareas(Guid id, string nombre, string descripcion, DateTime fecha_inicio, DateTime fecha_fin, Usuarios asignados, string estado)
         {
             string sql = @"[ActualizarTarea]";
-            var Consulta = await _sqlConnection.ExecuteAsync(sql, new { Id = id, Nombre = nombre, Descripcion = descripcion, Fecha_Inicio = fecha_inicio, Fecha_Fin = fecha_fin, Asignados = asignados, Estado = estado });
+            var Consulta = await _sqlConnection.ExecuteAsync(sql, new { Id = id, Nombre = nombre, Descripcion = descripcion, Fecha_Inicio = fecha_inicio, Fecha_Fin = fecha_fin, Asignados = asignados.Correo, Estado = estado });
             return id;
             
                 
         }
 
-        public async Task<Guid> AgregarTareas(string nombre, string descripcion, DateTime fecha_inicio, DateTime fecha_fin, Usuarios asignados, string estado)
+        public async Task<Guid> AgregarTareas(string nombre, string descripcion, DateTime fecha_inicio, DateTime fecha_fin, string asignados, string estado)
         {
             string sql = @"[AgregarTarea]";
             var Consulta = await _sqlConnection.ExecuteScalarAsync(sql, new { Nombre = nombre, Descripcion = descripcion, Fecha_Inicio = fecha_inicio, Fecha_Fin = fecha_fin, Asignados = asignados, Esatado = estado });

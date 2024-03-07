@@ -28,7 +28,7 @@ namespace BW
         {
             return await _TareasDA.MostrarTareasPorID(id);
         }
-        public async Task<Guid> AgregarTareas(string nombre, string descripcion, DateTime fecha_inicio, DateTime fecha_fin, Usuarios asignado, string estado)
+        public async Task<Guid> AgregarTareas(string nombre, string descripcion, DateTime fecha_inicio, DateTime fecha_fin, string asignado, string estado)
         {
             return await _TareasDA.AgregarTareas(nombre, descripcion, fecha_inicio, fecha_fin, asignado, estado);
         }

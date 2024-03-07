@@ -11,7 +11,7 @@ namespace Abstracciones.BW
     {
         Task<IEnumerable<Tareas>> MostrarTareas();
         Task<Abstracciones.Modelos.Tareas> MostrarTareasPorID(Guid id);
-        Task<Guid> AgregarTareas(string nombre, string descripcion, DateTime fecha_inicio, DateTime fecha_fin, Usuarios asignados, String estado);
+        Task<Guid> AgregarTareas(string nombre, string descripcion, DateTime fecha_inicio, DateTime fecha_fin, string asignados, String estado);
         Task<Guid> ActualizarTareas(Guid id, string nombre, string descripcion, DateTime fecha_inicio, DateTime fecha_fin, Usuarios asignados, String estado);
         Task<Guid> EliminarTareas(Guid id);
 
